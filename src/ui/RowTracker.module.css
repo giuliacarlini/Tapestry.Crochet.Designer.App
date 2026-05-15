@@ -1,0 +1,117 @@
+/* RowTracker component */
+
+.trackerPage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  max-width: 1280px;
+  width: 100%;
+}
+
+.trackerHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border-panel);
+  border-radius: var(--borderRadius-xl);
+  padding: 0.6rem 0.9rem;
+}
+
+.trackerHeader h2 {
+  margin: 0;
+  flex: 1;
+  font-size: var(--fontSize-lg);
+  color: var(--color-text-editor);
+}
+
+.rowIndicator {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-editor);
+  min-width: 10ch;
+  text-align: center;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.gridArea {
+  display: flex;
+  overflow: auto;
+  border: 1px solid var(--color-border-canvas);
+  border-radius: var(--borderRadius-lg);
+  background: var(--color-bg-canvas);
+  max-height: 70vh;
+}
+
+.rowGutter {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  user-select: none;
+  padding-top: 0;
+}
+
+.gutterRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.1rem;
+  padding-right: 0.3rem;
+  padding-left: 0.2rem;
+  font-size: var(--fontSize-xs);
+  font-family: var(--fontFamily-mono);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  box-sizing: border-box;
+  overflow: hidden;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.gutterRowActive {
+  color: var(--color-accent-highlight);
+  font-weight: 700;
+}
+
+.canvasWrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.canvasWrap canvas {
+  display: block;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: 0.6rem;
+  background: rgba(255, 253, 250, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border-panel);
+  border-radius: var(--borderRadius-xl);
+  position: sticky;
+  bottom: var(--spacing-sm);
+  z-index: 10;
+}
+
+@media (max-width: 980px) {
+  .trackerHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .gutterRow {
+    font-size: 0.55rem;
+  }
+}

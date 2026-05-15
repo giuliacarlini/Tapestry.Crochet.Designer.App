@@ -1,0 +1,60 @@
+/* SetupWizard — step-by-step setup flow */
+
+.wizard {
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+}
+
+.altAction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  padding: var(--spacing-md) 0 var(--spacing-sm);
+}
+
+.altActionLabel {
+  font-size: var(--fontSize-sm);
+  color: var(--color-text-secondary);
+}
+
+.staleHint {
+  border: 1px dashed var(--color-border-loading);
+  border-radius: var(--borderRadius-md);
+  padding: 0.5rem var(--spacing-md);
+  background: var(--color-bg-loading);
+  font-size: var(--fontSize-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.previewRow {
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 520px) {
+  .previewRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}

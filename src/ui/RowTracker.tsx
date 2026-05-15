@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { PaletteColor } from '../core/pattern'
+import shared from './shared.module.css'
+import s from './RowTracker.module.css'
+import { cx } from './cx'
+import { Slider, Switch } from './primitives'
 
 interface RowTrackerProps {
   width: number
@@ -7,7 +11,7 @@ interface RowTrackerProps {
   cells: number[]
   palette: PaletteColor[]
   title?: string
-  onBack: () => void
+  onBack?: () => void
 }
 
 export function RowTracker({ width, height, cells, palette, title, onBack }: RowTrackerProps) {
@@ -55,7 +59,6 @@ export function RowTracker({ width, height, cells, palette, title, onBack }: Row
     setCurrentRow((r) => Math.max(0, r - 1))
   }, [])
 
-  // Canvas rendering
   useEffect(() => {
     if (!hasPattern || !canvasRef.current) return
 
@@ -68,7 +71,6 @@ export function RowTracker({ width, height, cells, palette, title, onBack }: Row
     canvas.height = height * pixelSize
     context.imageSmoothingEnabled = false
 
-    // Draw cells
     for (let index = 0; index < cells.length; index += 1) {
       const x = index % width
       const y = Math.floor(index / width)
@@ -79,7 +81,6 @@ export function RowTracker({ width, height, cells, palette, title, onBack }: Row
       context.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize)
     }
 
-    // Draw grid lines
     if (showGrid && pixelSize >= 3) {
       context.strokeStyle = 'rgba(14, 10, 24, 0.15)'
       context.lineWidth = 1
@@ -101,7 +102,6 @@ export function RowTracker({ width, height, cells, palette, title, onBack }: Row
       }
     }
 
-    // Tracker overlay: darken non-active rows, highlight active
     context.fillStyle = 'rgba(0, 0, 0, 0.45)'
     for (let row = 0; row < height; row += 1) {
       if (row !== activeGridY) {
@@ -112,7 +112,6 @@ export function RowTracker({ width, height, cells, palette, title, onBack }: Row
     context.lineWidth = 2
     context.strokeRect(1, activeGridY * pixelSize + 1, width * pixelSize - 2, pixelSize - 2)
 
-    // Draw group counts only on the active row (after overlay so text is crisp)
     if (pixelSize >= 8) {
       const fontSize = Math.max(7, Math.min(pixelSize * 0.6, 20))
       context.font = `bold ${fontSize}px sans-serif`
@@ -127,7 +126,6 @@ export function RowTracker({ width, height, cells, palette, title, onBack }: Row
         while (x + groupLen < width && cells[rowStart + x + groupLen] === colorIndex) {
           groupLen += 1
         }
-        // Pick contrasting text color based on cell luminance
         const hex = paletteHex[colorIndex] ?? '#000000'
         const r = parseInt(hex.slice(1, 3), 16)
         const g = parseInt(hex.slice(3, 5), 16)
@@ -137,16 +135,15 @@ export function RowTracker({ width, height, cells, palette, title, onBack }: Row
 
         const label = String(groupLen)
         for (let i = 0; i < groupLen; i += 1) {
-          const cx = (x + i) * pixelSize + pixelSize / 2
+          const cellCx = (x + i) * pixelSize + pixelSize / 2
           const cy = activeGridY * pixelSize + pixelSize / 2
-          context.fillText(label, cx, cy)
+          context.fillText(label, cellCx, cy)
         }
         x += groupLen
       }
     }
   }, [cells, hasPattern, height, paletteHex, showGrid, width, zoom, activeGridY])
 
-  // Auto-scroll to keep active row visible
   useEffect(() => {
     if (!canvasRef.current) return
     const scrollTarget = activeGridY * zoom
@@ -156,7 +153,6 @@ export function RowTracker({ width, height, cells, palette, title, onBack }: Row
     }
   }, [activeGridY, zoom])
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
@@ -173,79 +169,70 @@ export function RowTracker({ width, height, cells, palette, title, onBack }: Row
 
   if (!hasPattern) {
     return (
-      <section className="panel">
-        <p className="hint">Nenhum padrao carregado para acompanhamento.</p>
-        <button type="button" onClick={onBack}>Voltar ao editor</button>
+      <section className={shared.panel}>
+        <p className={shared.hint}>Nenhum padrao carregado para acompanhamento.</p>
+        {onBack && <button type="button" onClick={onBack}>Voltar ao editor</button>}
       </section>
     )
   }
 
   return (
-    <section className="tracker-page">
-      <header className="tracker-header">
-        <button type="button" onClick={onBack}>
-          &larr; Voltar ao editor
-        </button>
+    <section className={s.trackerPage}>
+      <header className={s.trackerHeader}>
+        {onBack && (
+          <button type="button" onClick={onBack}>
+            &larr; Voltar ao editor
+          </button>
+        )}
         <h2>{title || 'Acompanhamento'}</h2>
-        <span className="tracker-row-indicator">
+        <span className={s.rowIndicator}>
           Linha {currentRow + 1} de {height}
         </span>
       </header>
 
-      <div className="tracker-controls">
-        <label className="range-row">
-          Zoom da grade
-          <input
-            type="range"
-            min={2}
-            max={24}
-            step={1}
-            value={zoom}
-            onChange={(event) => setZoom(Number(event.target.value))}
-          />
-        </label>
+      <div className={s.controls}>
+        <div className={shared.rangeRow}>
+          <span>Zoom da grade</span>
+          <Slider min={2} max={24} step={1} value={zoom} onChange={setZoom} aria-label="Zoom da grade" />
+        </div>
 
-        <label className="checkbox-row">
-          <input
-            type="checkbox"
-            checked={showGrid}
-            onChange={(event) => setShowGrid(event.target.checked)}
-          />
-          Mostrar linhas da grade
-        </label>
+        <div className={shared.checkboxRow}>
+          <Switch checked={showGrid} onChange={setShowGrid} aria-label="Mostrar linhas da grade" />
+          <span>Mostrar linhas da grade</span>
+        </div>
       </div>
 
-      <div className="tracker-grid-area" ref={gridAreaRef}>
-        <div className="row-gutter">
+      <div className={s.gridArea} ref={gridAreaRef}>
+        <div className={s.rowGutter}>
           {gutterRows.map(({ crochetRow, gridY, arrow }) => {
             const isActive = gridY === activeGridY
             const showLabel = isActive || (labelInterval > 0 && crochetRow % labelInterval === 0)
             return (
               <div
                 key={gridY}
-                className={`gutter-row${isActive ? ' gutter-row-active' : ''}`}
+                className={cx(s.gutterRow, isActive && s.gutterRowActive)}
                 style={{ height: zoom, fontSize: gutterFontSize }}
               >
                 {showLabel && (
                   <>
-                    <span className="gutter-arrow">{arrow}</span>
-                    <span className="gutter-number">{crochetRow}</span>
+                    <span>{arrow}</span>
+                    <span>{crochetRow}</span>
                   </>
                 )}
               </div>
             )
           })}
         </div>
-        <div className="tracker-canvas-wrap">
+        <div className={s.canvasWrap}>
           <canvas ref={canvasRef} />
         </div>
       </div>
 
-      <nav className="tracker-nav">
+      <nav className={s.nav}>
         <button type="button" disabled={currentRow <= 0} onClick={retreatRow}>
           &lt; Anterior
         </button>
-        <span className="tracker-row-indicator">
+        <span className={s.rowIndicator}>
           Linha {currentRow + 1} de {height}
         </span>
         <button type="button" disabled={currentRow >= height - 1} onClick={advanceRow}>

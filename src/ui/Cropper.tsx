@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import EasyCropper, { type Area, type Point } from 'react-easy-crop'
 import 'react-easy-crop/react-easy-crop.css'
+import shared from './shared.module.css'
+import s from './Cropper.module.css'
+import controlStyles from './Controls.module.css'
 
 interface CropperProps {
   imageSrc: string
@@ -12,9 +15,9 @@ export function Cropper({ imageSrc, onCropAreaChange }: CropperProps) {
   const [zoom, setZoom] = useState(1)
 
   return (
-    <section className="panel">
+    <section className={shared.panel}>
       <h2>2. Crop e Zoom</h2>
-      <div className="cropper-shell">
+      <div className={s.cropperShell}>
         <EasyCropper
           image={imageSrc}
           crop={crop}
@@ -27,10 +30,11 @@ export function Cropper({ imageSrc, onCropAreaChange }: CropperProps) {
         />
       </div>
 
-      <label className="range-row">
+      <label className={shared.rangeRow}>
         Zoom
         <input
           type="range"
+          className={controlStyles.customRange}
           min={1}
           max={4}
           step={0.05}

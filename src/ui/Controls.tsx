@@ -1,4 +1,7 @@
+import { useMemo } from 'react'
 import type { ResolutionPreset } from '../core/pattern'
+import shared from './shared.module.css'
+import { Select, Slider, Switch } from './primitives'
 
 interface ControlsProps {
   title: string
@@ -31,12 +34,17 @@ export function Controls({
   onPaletteSizeChange,
   onGenerate,
 }: ControlsProps) {
-  return (
-    <section className="panel">
-      <h2>3. Gerar Padrao</h2>
+  const resolutionSelectOptions = useMemo(
+    () => resolutionOptions.map((option) => ({ label: option.label, value: option.label })),
+    [resolutionOptions],
+  )
 
-      <label className="field">
-        Titulo (opcional)
+  return (
+    <section className={shared.panel}>
+      <h2>Configurações do padrão</h2>
+
+      <label className={shared.field}>
+        Título (opcional)
         <input
           type="text"
           maxLength={80}
@@ -44,42 +52,47 @@ export function Controls({
           placeholder="Ex.: Rosa pixel"
           onChange={(event) => onTitleChange(event.target.value)}
         />
+        <span className={shared.hint}>Ajuda a identificar o projeto ao salvar e exportar.</span>
       </label>
 
-      <label className="field">
-        Resolucao
-        <select value={selectedResolution} onChange={(event) => onResolutionChange(event.target.value)}>
-          {resolutionOptions.map((option) => (
-            <option key={option.label} value={option.label}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </label>
+      <div className={shared.field}>
+        <span>Resolução</span>
+        <Select
+          value={selectedResolution}
+          options={resolutionSelectOptions}
+          onChange={onResolutionChange}
+          aria-label="Resolução"
+        />
+        <span className={shared.hint}>Largura × altura em pontos. Mais pontos = mais detalhes e mais tempo de criação.</span>
+      </div>
 
-      <label className="field">
-        Numero de cores (2 a 12)
-        <input
-          type="number"
+      <div className={shared.field}>
+        <span>Número de cores: {paletteSize}</span>
+        <Slider
           min={2}
           max={12}
           step={1}
           value={paletteSize}
-          onChange={(event) => onPaletteSizeChange(Number(event.target.value))}
+          onChange={onPaletteSizeChange}
+          aria-label="Número de cores"
         />
-      </label>
+        <span className={shared.hint}>Use 4–8 cores para um padrão mais fácil de bordar com fios reais.</span>
+      </div>
 
-      <label className="checkbox-row">
-        <input
-          type="checkbox"
-          checked={cleanIsolated}
-          onChange={(event) => onCleanToggle(event.target.checked)}
-        />
-        Limpar pixels isolados
-      </label>
+      <div className={shared.field}>
+        <div className={shared.checkboxRow}>
+          <Switch
+            checked={cleanIsolated}
+            onChange={onCleanToggle}
+            aria-label="Limpar pixels isolados"
+          />
+          <span>Limpar pixels isolados</span>
+        </div>
+        <span className={shared.hint}>Remove pontos soltos — recomendado para crochê tapestry.</span>
+      </div>
 
       <button type="button" onClick={onGenerate} disabled={!canGenerate || isProcessing}>
-        {isProcessing ? 'Processando no worker...' : actionLabel ?? `Gerar padrao ${selectedResolution}`}
+        {isProcessing ? 'Processando...' : actionLabel ?? `Gerar padrão ${selectedResolution}`}
       </button>
     </section>
   )

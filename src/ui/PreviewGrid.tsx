@@ -1,5 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, type PointerEvent } from 'react'
 import type { PaletteColor } from '../core/pattern'
+import shared from './shared.module.css'
+import s from './PreviewGrid.module.css'
+import { cx } from './cx'
 
 export type EditorTool = 'paint' | 'erase' | 'fill' | 'picker'
 
@@ -8,6 +11,8 @@ interface PreviewGridProps {
   height: number
   cells: number[]
   palette: PaletteColor[]
+  zoom?: number
+  showGrid?: boolean
   canEdit?: boolean
   editorTool?: EditorTool
   onPaintStroke?: (indices: number[]) => void
@@ -40,6 +45,8 @@ export function PreviewGrid({
   height,
   cells,
   palette,
+  zoom = 4,
+  showGrid = true,
   canEdit = false,
   editorTool = 'paint',
   onPaintStroke = () => {},
@@ -49,8 +56,6 @@ export function PreviewGrid({
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const isDrawingRef = useRef(false)
   const strokeIndicesRef = useRef<Set<number>>(new Set())
-  const [zoom, setZoom] = useState(4)
-  const [showGrid, setShowGrid] = useState(true)
   const hasPattern = cells.length > 0 && palette.length > 0
 
   const paletteHex = useMemo(() => palette.map((entry) => entry.hex), [palette])
@@ -128,84 +133,65 @@ export function PreviewGrid({
 
   }, [cells, hasPattern, height, paletteHex, showGrid, width, zoom])
 
+  const canvasClassName = canEdit
+    ? cx(
+        s.editableCanvas,
+        editorTool === 'fill' && s.toolFill,
+        editorTool === 'picker' && s.toolPicker,
+      )
+    : undefined
+
   return (
-    <section className="panel">
-      <h2>Preview do Grid</h2>
+    <div className={s.canvasContainer}>
       {!hasPattern ? (
-        <p className="hint">Gere um padrao para visualizar o grid.</p>
+        <p className={shared.hint}>Gere um padrao para visualizar o grid.</p>
       ) : (
-        <>
-          <div className="preview-controls">
-            <label className="range-row">
-              Zoom da grade
-              <input
-                type="range"
-                min={2}
-                max={8}
-                step={1}
-                value={zoom}
-                onChange={(event) => setZoom(Number(event.target.value))}
-              />
-            </label>
+        <div className={shared.canvasWrap}>
+          <canvas
+            ref={canvasRef}
+            className={canvasClassName}
+            onPointerDown={(event) => {
+              if (!canEdit || !canvasRef.current) {
+                return
+              }
 
-            <label className="checkbox-row">
-              <input
-                type="checkbox"
-                checked={showGrid}
-                onChange={(event) => setShowGrid(event.target.checked)}
-              />
-              Mostrar linhas da grade
-            </label>
+              const index = getCellIndexFromPointer(event, canvasRef.current, width, height, zoom)
+              if (index === null) {
+                return
+              }
 
-          </div>
+              if (editorTool === 'fill') {
+                onFillCell(index)
+                return
+              }
 
-          <div className="canvas-wrap">
-            <canvas
-              ref={canvasRef}
-              className={canEdit ? `editable-canvas tool-${editorTool}` : ''}
-              onPointerDown={(event) => {
-                if (!canEdit || !canvasRef.current) {
-                  return
-                }
+              if (editorTool === 'picker') {
+                onPickCellColor(index)
+                return
+              }
 
-                const index = getCellIndexFromPointer(event, canvasRef.current, width, height, zoom)
-                if (index === null) {
-                  return
-                }
+              isDrawingRef.current = true
+              strokeIndicesRef.current.clear()
+              strokeIndicesRef.current.add(index)
+            }}
+            onPointerMove={(event) => {
+              if (!canEdit || !isDrawingRef.current || !canvasRef.current) {
+                return
+              }
 
-                if (editorTool === 'fill') {
-                  onFillCell(index)
-                  return
-                }
+              const index = getCellIndexFromPointer(event, canvasRef.current, width, height, zoom)
+              if (index === null) {
+                return
+              }
 
-                if (editorTool === 'picker') {
-                  onPickCellColor(index)
-                  return
-                }
-
-                isDrawingRef.current = true
-                strokeIndicesRef.current.clear()
-                strokeIndicesRef.current.add(index)
-              }}
-              onPointerMove={(event) => {
-                if (!canEdit || !isDrawingRef.current || !canvasRef.current) {
-                  return
-                }
-
-                const index = getCellIndexFromPointer(event, canvasRef.current, width, height, zoom)
-                if (index === null) {
-                  return
-                }
-
-                strokeIndicesRef.current.add(index)
-              }}
-              onPointerLeave={() => {
-                commitStroke()
-              }}
-            />
-          </div>
-        </>
+              strokeIndicesRef.current.add(index)
+            }}
+            onPointerLeave={() => {
+              commitStroke()
+            }}
+          />
+        </div>
       )}
-    </section>
+    </div>
   )
 }

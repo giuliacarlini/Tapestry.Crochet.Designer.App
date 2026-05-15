@@ -1,0 +1,78 @@
+/* WizardProgress — step indicator with dots and connectors */
+
+.progress {
+  display: flex;
+  align-items: flex-start;
+  padding: var(--spacing-xl) 0 0;
+}
+
+.stepItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.connector {
+  flex: 1;
+  height: 2px;
+  background: var(--color-border-palette);
+  align-self: flex-start;
+  margin-top: calc(1rem - 1px);
+  min-width: 1.5rem;
+  transition: background var(--transition-normal);
+}
+
+.connectorActive {
+  background: var(--color-accent-primary);
+}
+
+.dot {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid var(--color-border-palette);
+  background: var(--color-bg-panel);
+  color: var(--color-text-tertiary);
+  font-size: var(--fontSize-sm);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: default;
+  transition: border-color var(--transition-normal), background var(--transition-normal), color var(--transition-normal);
+}
+
+.dotCurrent {
+  border-color: var(--color-accent-primary);
+  background: var(--color-accent-primary);
+  color: #fff;
+}
+
+.dotDone {
+  border-color: var(--color-accent-primary);
+  color: var(--color-accent-primary);
+  cursor: pointer;
+}
+
+.dotDone:hover {
+  background: var(--color-bg-pill);
+}
+
+.label {
+  font-size: var(--fontSize-xs);
+  color: var(--color-text-tertiary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.labelCurrent {
+  color: var(--color-accent-primary);
+  font-weight: 600;
+}
+
+.labelDone {
+  color: var(--color-text-secondary);
+}

@@ -1,0 +1,21 @@
+/* PreviewGrid component */
+
+.canvasContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 0;
+  flex: 1;
+}
+
+.editableCanvas {
+  cursor: crosshair;
+}
+
+.toolFill {
+  cursor: cell;
+}
+
+.toolPicker {
+  cursor: copy;
+}

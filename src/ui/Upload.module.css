@@ -1,0 +1,50 @@
+/* Upload component — drag-and-drop zone */
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  border: 2px dashed var(--color-border-input);
+  border-radius: var(--borderRadius-xl);
+  background: var(--color-bg-panel);
+  cursor: pointer;
+  transition: border-color 200ms ease, background 200ms ease;
+  text-align: center;
+}
+
+.dropzone:hover,
+.dropzoneActive {
+  border-color: var(--color-accent-primary);
+  background: rgba(125, 77, 42, 0.04);
+}
+
+.dropzoneIcon {
+  width: 4rem;
+  height: 4rem;
+  color: var(--color-accent-primary);
+  opacity: 0.75;
+}
+
+.dropzoneText {
+  margin: 0;
+  font-size: var(--fontSize-md);
+  color: var(--color-text-secondary);
+}
+
+.dropzoneHint {
+  margin: 0;
+  font-size: var(--fontSize-sm);
+  color: var(--color-text-tertiary);
+}
+
+.dropzoneTextAccent {
+  color: var(--color-accent-primary);
+  font-weight: 600;
+}
+
+.hiddenInput {
+  display: none;
+}

@@ -1,9 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap');
+@import './tokens.css';
 
 :root {
-  font-family: 'Space Grotesk', 'Trebuchet MS', sans-serif;
-  color: #20170f;
-  background: radial-gradient(circle at top left, #fff7df 0%, #f8ead9 45%, #f4e2ce 100%);
+  font-family: var(--fontFamily-primary);
+  color: var(--color-text-primary);
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(125, 77, 42, 0.015) 1px,
+      rgba(125, 77, 42, 0.015) 2px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 1px,
+      rgba(125, 77, 42, 0.015) 1px,
+      rgba(125, 77, 42, 0.015) 2px
+    ),
+    radial-gradient(circle at top left, var(--color-bg-page-start) 0%, var(--color-bg-page-mid) 45%, var(--color-bg-page-end) 100%);
   line-height: 1.45;
   font-weight: 400;
   font-synthesis: none;
@@ -23,4 +39,92 @@ body {
 
 #root {
   min-height: 100vh;
+}
+
+/* --- Global element styles --- */
+
+input[type='text'],
+input[type='number'],
+input[type='color'],
+select,
+input[type='file'],
+textarea {
+  width: 100%;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--borderRadius-md);
+  padding: 0.5rem 0.65rem;
+  box-sizing: border-box;
+  background: var(--color-bg-panel);
+  font-size: var(--fontSize-md);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+input[type='text']:focus,
+input[type='number']:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 0 0 3px rgba(125, 77, 42, 0.12);
+}
+
+textarea {
+  margin-top: var(--spacing-md);
+  font-family: var(--fontFamily-mono);
+  font-size: 0.8rem;
+}
+
+button {
+  border: 1px solid var(--color-border-button);
+  background: var(--color-bg-button-default);
+  color: #fff;
+  border-radius: var(--borderRadius-pill);
+  padding: 0.6rem var(--spacing-xl);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: var(--fontSize-md);
+  letter-spacing: 0.02em;
+  box-shadow: 0 1px 3px rgba(44, 29, 18, 0.15);
+  transition: background 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+button:hover:not(:disabled) {
+  background: var(--color-bg-button-hover);
+  box-shadow: 0 2px 6px rgba(44, 29, 18, 0.2);
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(44, 29, 18, 0.15);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus-ring);
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-accent-primary);
+  box-shadow: var(--shadow-focus-ring);
+}
+
+/* --- Reduced motion --- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

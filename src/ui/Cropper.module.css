@@ -1,0 +1,11 @@
+/* Cropper component */
+
+.cropperShell {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  border-radius: var(--borderRadius-lg);
+  overflow: hidden;
+  background: var(--color-bg-cropper);
+  margin-bottom: var(--spacing-md);
+}

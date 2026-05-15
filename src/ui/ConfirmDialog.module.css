@@ -1,0 +1,61 @@
+/* ConfirmDialog — modal de confirmacao */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 12, 6, 0.45);
+  animation: fadeIn var(--transition-fast) ease;
+  z-index: 50;
+}
+
+.content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border-panel);
+  border-radius: var(--borderRadius-xl);
+  padding: 1.5rem 1.75rem;
+  width: min(420px, calc(100vw - 2rem));
+  box-shadow: var(--shadow-hero);
+  animation: slideUp var(--transition-normal) ease;
+  z-index: 51;
+}
+
+.title {
+  margin: 0 0 var(--spacing-sm);
+  font-size: var(--fontSize-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.description {
+  margin: 0 0 var(--spacing-xl);
+  font-size: var(--fontSize-md);
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translate(-50%, calc(-50% + 10px)); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .content {
+    animation: none;
+  }
+}

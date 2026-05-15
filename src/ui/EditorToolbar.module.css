@@ -1,0 +1,124 @@
+/* EditorToolbar — toolbar tray with tool buttons */
+
+.toolbarPanel h2 {
+  margin: 0 0 var(--spacing-md);
+  font-size: var(--fontSize-lg);
+}
+
+.toolbarVertical {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+
+.toolTray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: var(--spacing-sm);
+  background: rgba(125, 77, 42, 0.05);
+  border-radius: var(--borderRadius-lg);
+}
+
+.toolIconButton {
+  width: 2.6rem;
+  height: 2.6rem;
+  padding: 0;
+  border-radius: var(--borderRadius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--color-text-editor);
+  cursor: pointer;
+  transition: background 120ms ease, transform 80ms ease, box-shadow 120ms ease;
+}
+
+.toolIconButton:hover:not(:disabled) {
+  background: rgba(125, 77, 42, 0.08);
+  transform: none;
+  box-shadow: none;
+}
+
+.toolIconButton svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.toolIconButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.activeTool {
+  background: var(--color-accent-primary) !important;
+  color: #fff;
+  border-color: var(--color-border-button);
+  box-shadow: 0 1px 4px rgba(44, 29, 18, 0.2);
+}
+
+.activeTool:hover:not(:disabled) {
+  background: var(--color-bg-button-hover) !important;
+}
+
+.divider {
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--color-border-canvas);
+  margin: var(--spacing-xs) 0;
+}
+
+.sectionLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  margin: var(--spacing-sm) 0 0.3rem;
+}
+
+.paletteStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.colorChip {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--borderRadius-sm);
+  border: 1px solid var(--color-border-toolbar-chip);
+  padding: 0;
+  cursor: pointer;
+  transition: transform 100ms ease, box-shadow 100ms ease;
+}
+
+.colorChip:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: none;
+  background: inherit;
+}
+
+.colorChipActive {
+  box-shadow: var(--shadow-active-chip);
+}
+
+.activeColorRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: var(--spacing-sm);
+  cursor: pointer;
+}
+
+.activeColorHex {
+  font-size: 0.78rem;
+  font-family: var(--fontFamily-mono);
+  color: var(--color-text-editor);
+}

@@ -1,9 +1,12 @@
 import { useMemo } from 'react'
 import type { Pattern } from '../core/pattern'
 import { serializePattern } from '../core/pattern'
+import s from './Export.module.css'
+import { useToast } from './primitives'
 
 interface ExportProps {
   pattern: Pattern | null
+  onDownloadProject: () => void
 }
 
 function toSlug(value: string): string {
@@ -15,10 +18,11 @@ function toSlug(value: string): string {
   return trimmed.replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
 }
 
-export function Export({ pattern }: ExportProps) {
+export function Export({ pattern, onDownloadProject }: ExportProps) {
+  const { toast } = useToast()
   const json = useMemo(() => (pattern ? serializePattern(pattern) : ''), [pattern])
 
-  const handleDownload = () => {
+  const handleDownloadJson = () => {
     if (!pattern) {
       return
     }
@@ -32,16 +36,33 @@ export function Export({ pattern }: ExportProps) {
     anchor.download = `${fileName}.json`
     anchor.click()
     URL.revokeObjectURL(fileUrl)
+    toast('JSON baixado com sucesso', 'success')
+  }
+
+  const handleCopyJson = async () => {
+    if (!pattern) {
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(json)
+      toast('JSON copiado para a area de transferencia', 'success')
+    } catch {
+      toast('Nao foi possivel copiar', 'error')
+    }
   }
 
   return (
-    <section className="panel">
-      <h2>6. Exportar JSON</h2>
-      <button type="button" disabled={!pattern} onClick={handleDownload}>
+    <div className={s.exportActions}>
+      <button type="button" disabled={!pattern} onClick={handleDownloadJson}>
         Baixar JSON
       </button>
-
-      <textarea readOnly rows={12} value={json} placeholder="JSON do padrao sera exibido aqui." />
-    </section>
+      <button type="button" disabled={!pattern} onClick={handleCopyJson}>
+        Copiar JSON
+      </button>
+      <button type="button" disabled={!pattern} onClick={onDownloadProject}>
+        Salvar projeto
+      </button>
+    </div>
   )
 }

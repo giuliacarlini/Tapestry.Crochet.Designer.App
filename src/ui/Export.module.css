@@ -1,0 +1,12 @@
+/* Export component */
+
+.exportActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.exportActions button {
+  width: 100%;
+  text-align: left;
+}

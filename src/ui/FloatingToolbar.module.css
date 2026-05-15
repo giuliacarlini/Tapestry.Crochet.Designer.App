@@ -1,0 +1,144 @@
+/* FloatingToolbar — horizontal toolbar over the canvas */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  padding: 0.45rem 0.75rem;
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border-panel);
+  border-radius: var(--borderRadius-xl);
+  box-shadow: var(--shadow-panel);
+  user-select: none;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.separator {
+  width: 1px;
+  height: 1.6rem;
+  background: var(--color-border-canvas);
+  flex-shrink: 0;
+  margin: 0 var(--spacing-xs);
+}
+
+.toggleGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.toolBtn {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--borderRadius-md);
+  color: var(--color-text-editor);
+  cursor: pointer;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.toolBtn:hover:not(:disabled) {
+  background: rgba(125, 77, 42, 0.08);
+}
+
+.toolBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.toolBtn svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Active state for ToggleGroup items */
+.toolBtn[data-state="on"] {
+  background: var(--color-accent-primary);
+  color: #fff;
+  border-color: var(--color-border-button);
+  box-shadow: 0 1px 4px rgba(44, 29, 18, 0.2);
+}
+
+.toolBtn[data-state="on"]:hover:not(:disabled) {
+  background: var(--color-bg-button-hover);
+}
+
+.label {
+  font-size: var(--fontSize-sm);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.zoomValue {
+  font-size: var(--fontSize-sm);
+  font-family: var(--fontFamily-mono);
+  color: var(--color-text-editor);
+  min-width: 2ch;
+  text-align: right;
+}
+
+.colorHex {
+  font-size: 0.72rem;
+  font-family: var(--fontFamily-mono);
+  color: var(--color-text-editor);
+}
+
+.colorChip {
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: var(--borderRadius-sm);
+  border: 1px solid var(--color-border-toolbar-chip);
+  padding: 0;
+  cursor: pointer;
+  transition: transform 100ms ease, box-shadow 100ms ease;
+}
+
+.colorChip:hover:not(:disabled) {
+  transform: scale(1.15);
+}
+
+.colorChipActive {
+  box-shadow: var(--shadow-active-chip);
+}
+
+/* --- Mobile: hide zoom label + palette strip --- */
+@media (max-width: 768px) {
+  .label {
+    display: none;
+  }
+
+  .colorHex {
+    display: none;
+  }
+
+  .zoomValue {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .toolbar {
+    padding: 0.35rem 0.5rem;
+  }
+
+  .colorChip {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+}

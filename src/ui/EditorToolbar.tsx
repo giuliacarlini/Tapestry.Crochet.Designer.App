@@ -1,6 +1,9 @@
-import { useRef } from 'react'
 import type { PaletteColor } from '../core/pattern'
 import type { EditorTool } from './PreviewGrid'
+import shared from './shared.module.css'
+import s from './EditorToolbar.module.css'
+import { cx } from './cx'
+import { Tooltip, ColorPicker } from './primitives'
 
 interface EditorToolbarProps {
   editorTool: EditorTool
@@ -87,122 +90,109 @@ export function EditorToolbar({
   onSelectPaintColor,
   onActiveColorHexChange,
 }: EditorToolbarProps) {
-  const colorInputRef = useRef<HTMLInputElement | null>(null)
-
   return (
-    <section className="panel editor-toolbar-panel">
+    <section className={cx(shared.panel, s.toolbarPanel)}>
       <h2>Ferramentas</h2>
 
-      <div className="editor-toolbar editor-toolbar-vertical">
-        <button
-          type="button"
-          className={`tool-icon-button has-tooltip ${editorTool === 'paint' ? 'active-tool' : ''}`}
-          onClick={() => onEditorToolChange('paint')}
-          disabled={!canEdit}
-          aria-label="Lapis"
-          data-tooltip="Lapis"
-        >
-          <PencilIcon />
-          <span className="sr-only">Lapis</span>
-        </button>
-        <button
-          type="button"
-          className={`tool-icon-button has-tooltip ${editorTool === 'erase' ? 'active-tool' : ''}`}
-          onClick={() => onEditorToolChange('erase')}
-          disabled={!canEdit}
-          aria-label="Borracha"
-          data-tooltip="Borracha"
-        >
-          <EraserIcon />
-          <span className="sr-only">Borracha</span>
-        </button>
-        <button
-          type="button"
-          className={`tool-icon-button has-tooltip ${editorTool === 'fill' ? 'active-tool' : ''}`}
-          onClick={() => onEditorToolChange('fill')}
-          disabled={!canEdit}
-          aria-label="Balde"
-          data-tooltip="Balde"
-        >
-          <BucketIcon />
-          <span className="sr-only">Balde</span>
-        </button>
-        <button
-          type="button"
-          className={`tool-icon-button has-tooltip ${editorTool === 'picker' ? 'active-tool' : ''}`}
-          onClick={() => onEditorToolChange('picker')}
-          disabled={!canEdit}
-          aria-label="Seletor"
-          data-tooltip="Seletor"
-        >
-          <PickerIcon />
-          <span className="sr-only">Seletor</span>
-        </button>
+      <div className={s.toolbarVertical}>
+        <div className={s.toolTray}>
+          <Tooltip content="Lapis">
+            <button
+              type="button"
+              className={cx(s.toolIconButton, editorTool === 'paint' && s.activeTool)}
+              onClick={() => onEditorToolChange('paint')}
+              disabled={!canEdit}
+              aria-label="Lapis"
+            >
+              <PencilIcon />
+            </button>
+          </Tooltip>
+          <Tooltip content="Borracha">
+            <button
+              type="button"
+              className={cx(s.toolIconButton, editorTool === 'erase' && s.activeTool)}
+              onClick={() => onEditorToolChange('erase')}
+              disabled={!canEdit}
+              aria-label="Borracha"
+            >
+              <EraserIcon />
+            </button>
+          </Tooltip>
+          <Tooltip content="Balde">
+            <button
+              type="button"
+              className={cx(s.toolIconButton, editorTool === 'fill' && s.activeTool)}
+              onClick={() => onEditorToolChange('fill')}
+              disabled={!canEdit}
+              aria-label="Balde"
+            >
+              <BucketIcon />
+            </button>
+          </Tooltip>
+          <Tooltip content="Seletor">
+            <button
+              type="button"
+              className={cx(s.toolIconButton, editorTool === 'picker' && s.activeTool)}
+              onClick={() => onEditorToolChange('picker')}
+              disabled={!canEdit}
+              aria-label="Seletor"
+            >
+              <PickerIcon />
+            </button>
+          </Tooltip>
+        </div>
 
-        <hr className="toolbar-divider" />
-
-        <button
-          type="button"
-          className="tool-icon-button has-tooltip"
-          onClick={onUndo}
-          disabled={!canEdit || !canUndo}
-          aria-label="Desfazer"
-          data-tooltip="Desfazer"
-        >
-          <UndoIcon />
-          <span className="sr-only">Desfazer</span>
-        </button>
-        <button
-          type="button"
-          className="tool-icon-button has-tooltip"
-          onClick={onRedo}
-          disabled={!canEdit || !canRedo}
-          aria-label="Refazer"
-          data-tooltip="Refazer"
-        >
-          <RedoIcon />
-          <span className="sr-only">Refazer</span>
-        </button>
+        <div className={s.toolTray}>
+          <Tooltip content="Desfazer">
+            <button
+              type="button"
+              className={s.toolIconButton}
+              onClick={onUndo}
+              disabled={!canEdit || !canUndo}
+              aria-label="Desfazer"
+            >
+              <UndoIcon />
+            </button>
+          </Tooltip>
+          <Tooltip content="Refazer">
+            <button
+              type="button"
+              className={s.toolIconButton}
+              onClick={onRedo}
+              disabled={!canEdit || !canRedo}
+              aria-label="Refazer"
+            >
+              <RedoIcon />
+            </button>
+          </Tooltip>
+        </div>
       </div>
 
-      <p className="toolbar-section-label">Paleta</p>
-      <div className="toolbar-palette" aria-label="Selecao rapida de cor">
+      <p className={s.sectionLabel}>Paleta</p>
+      <div className={s.paletteStrip} aria-label="Selecao rapida de cor">
         {palette.map((entry) => {
           const isActive = entry.id === paintColorIndex
           return (
-            <button
-              key={`toolbar-color-${entry.id}`}
-              type="button"
-              className={`toolbar-color-chip has-tooltip ${isActive ? 'toolbar-color-chip-active' : ''}`}
-              style={{ backgroundColor: entry.hex }}
-              data-tooltip={entry.hex}
-              onClick={() => onSelectPaintColor(entry.id)}
-              disabled={!canEdit}
-            />
+            <Tooltip key={`toolbar-color-${entry.id}`} content={entry.hex}>
+              <button
+                type="button"
+                className={cx(s.colorChip, isActive && s.colorChipActive)}
+                style={{ backgroundColor: entry.hex }}
+                onClick={() => onSelectPaintColor(entry.id)}
+                disabled={!canEdit}
+              />
+            </Tooltip>
           )
         })}
       </div>
 
-      <div
-        className="active-color-swatch-row"
-        onClick={() => {
-          if (canEdit) colorInputRef.current?.click()
-        }}
-      >
-        <span
-          className="active-color-swatch has-tooltip"
-          data-tooltip="Clique para editar a cor ativa"
-          style={{ backgroundColor: activeColorHex }}
-        />
-        <span className="active-color-hex">{activeColorHex}</span>
-        <input
-          ref={colorInputRef}
-          type="color"
-          value={activeColorHex}
-          onChange={(event) => onActiveColorHexChange(event.target.value)}
+      <div className={s.activeColorRow}>
+        <ColorPicker
+          color={activeColorHex}
+          onChange={onActiveColorHexChange}
           disabled={!canEdit}
-          className="sr-only-color-input"
         />
+        <span className={s.activeColorHex}>{activeColorHex}</span>
       </div>
     </section>
   )

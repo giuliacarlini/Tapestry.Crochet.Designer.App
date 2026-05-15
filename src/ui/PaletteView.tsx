@@ -1,5 +1,10 @@
 import { useMemo, useState } from 'react'
 import type { PaletteColor } from '../core/pattern'
+import shared from './shared.module.css'
+import s from './PaletteView.module.css'
+import { cx } from './cx'
+import { ColorPicker, Select } from './primitives'
+import { ConfirmDialog } from './ConfirmDialog'
 
 interface PaletteViewProps {
   palette: PaletteColor[]
@@ -7,6 +12,7 @@ interface PaletteViewProps {
   activePaletteIndex: number
   cells: number[]
   canEdit?: boolean
+  compact?: boolean
   showEditControls?: boolean
   onSelectPaletteIndex?: (index: number) => void
   onPaletteColorChange?: (index: number, hex: string) => void
@@ -21,6 +27,7 @@ export function PaletteView({
   activePaletteIndex,
   cells,
   canEdit = false,
+  compact = false,
   showEditControls = true,
   onSelectPaletteIndex = () => {},
   onPaletteColorChange = () => {},
@@ -28,6 +35,7 @@ export function PaletteView({
 }: PaletteViewProps) {
   const [replaceFrom, setReplaceFrom] = useState(0)
   const [replaceTo, setReplaceTo] = useState(0)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   const usageByColor = useMemo(() => {
     const counts = new Array<number>(palette.length).fill(0)
@@ -39,43 +47,51 @@ export function PaletteView({
     return counts
   }, [cells, palette.length])
 
+  const paletteSelectOptions = useMemo(
+    () => palette.map((entry) => ({ label: `#${entry.id} — ${entry.hex}`, value: String(entry.id) })),
+    [palette],
+  )
+
+  const fromEntry = palette.find((e) => e.id === replaceFrom)
+  const toEntry = palette.find((e) => e.id === replaceTo)
+
   return (
-    <section className="panel">
-      <h2>5. Paleta ({paletteSize} cores)</h2>
+    <section className={shared.panel}>
+      <h2>Paleta ({paletteSize} cores)</h2>
 
       {palette.length === 0 ? (
-        <p className="hint">A paleta aparece apos gerar o padrao.</p>
+        <p className={shared.hint}>A paleta aparece apos gerar o padrao.</p>
       ) : (
         <>
-          <div className="palette-grid">
+          <div className={cx(s.paletteGrid, compact && s.compactGrid)}>
             {palette.map((entry) => {
               const isActive = entry.id === activePaletteIndex
               return (
                 <article
                   key={entry.id}
-                  className={`palette-item ${isActive ? 'active-palette-item' : ''}`}
+                  className={cx(s.paletteItem, isActive && s.active)}
                   onClick={() => {
                     if (canEdit) {
                       onSelectPaletteIndex(entry.id)
                     }
                   }}
                 >
-                  <div className="swatch" style={{ backgroundColor: entry.hex }} />
+                  <div className={s.swatch} style={{ backgroundColor: entry.hex }} />
                   <p>#{entry.id}</p>
                   <p>{entry.hex}</p>
                   <p>Uso: {usageByColor[entry.id] ?? 0}</p>
                   {showEditControls ? (
                     <>
-                      <label className="field">
-                        Cor
-                        <input
-                          type="color"
-                          value={entry.hex}
+                      <div className={shared.field}>
+                        <span>Cor</span>
+                        <ColorPicker
+                          color={entry.hex}
+                          onChange={(hex) => onPaletteColorChange(entry.id, hex)}
                           disabled={!canEdit}
-                          onChange={(event) => onPaletteColorChange(entry.id, event.target.value)}
+                          size="sm"
                         />
-                      </label>
-                      <label className="field">
+                      </div>
+                      <label className={shared.field}>
                         HEX
                         <input
                           type="text"
@@ -97,46 +113,48 @@ export function PaletteView({
           </div>
 
           {showEditControls ? (
-            <div className="replace-row">
-              <label className="field">
-                Substituir cor
-                <select
-                  value={replaceFrom}
-                  onChange={(event) => setReplaceFrom(Number(event.target.value))}
-                  disabled={!canEdit}
-                >
-                  {palette.map((entry) => (
-                    <option key={`from-${entry.id}`} value={entry.id}>
-                      #{entry.id}
-                    </option>
-                  ))}
-                </select>
-              </label>
+            <div className={s.replaceRow}>
+              <div className={shared.field}>
+                <span>Substituir cor</span>
+                <Select
+                  value={String(replaceFrom)}
+                  options={paletteSelectOptions}
+                  onChange={(value) => setReplaceFrom(Number(value))}
+                  aria-label="Substituir cor"
+                />
+              </div>
 
-              <label className="field">
-                Pela cor
-                <select
-                  value={replaceTo}
-                  onChange={(event) => setReplaceTo(Number(event.target.value))}
-                  disabled={!canEdit}
-                >
-                  {palette.map((entry) => (
-                    <option key={`to-${entry.id}`} value={entry.id}>
-                      #{entry.id}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <div className={shared.field}>
+                <span>Pela cor</span>
+                <Select
+                  value={String(replaceTo)}
+                  options={paletteSelectOptions}
+                  onChange={(value) => setReplaceTo(Number(value))}
+                  aria-label="Pela cor"
+                />
+              </div>
 
               <button
                 type="button"
                 disabled={!canEdit || replaceFrom === replaceTo}
-                onClick={() => onReplacePaletteIndex(replaceFrom, replaceTo)}
+                onClick={() => setConfirmOpen(true)}
               >
                 Aplicar substituicao
               </button>
             </div>
           ) : null}
+
+          <ConfirmDialog
+            open={confirmOpen}
+            title="Substituir cor na paleta"
+            description={`Substituir ${fromEntry?.hex ?? `#${replaceFrom}`} pela cor ${toEntry?.hex ?? `#${replaceTo}`} em todas as celulas do padrao?`}
+            confirmLabel="Substituir"
+            onConfirm={() => {
+              setConfirmOpen(false)
+              onReplacePaletteIndex(replaceFrom, replaceTo)
+            }}
+            onCancel={() => setConfirmOpen(false)}
+          />
         </>
       )}
     </section>
