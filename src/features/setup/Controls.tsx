@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import type { ResolutionPreset } from '../core/pattern'
-import shared from './shared.module.css'
-import { Select, Slider, Switch } from './primitives'
+import type { ResolutionPreset } from '../../core/pattern'
+import shared from '../../ui/shared.module.css'
+import { Select, Slider, Switch } from '../../ui/primitives'
 
 interface ControlsProps {
   title: string

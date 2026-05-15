@@ -1,9 +1,9 @@
-import type { PaletteColor } from '../core/pattern'
-import type { EditorTool } from './PreviewGrid'
-import shared from './shared.module.css'
+import type { PaletteColor } from '../../core/pattern'
+import type { EditorTool } from '../preview/PreviewGrid'
+import shared from '../../ui/shared.module.css'
 import s from './EditorToolbar.module.css'
-import { cx } from './cx'
-import { Tooltip, ColorPicker } from './primitives'
+import { cx } from '../../ui/cx'
+import { Tooltip, ColorPicker } from '../../ui/primitives'
 
 interface EditorToolbarProps {
   editorTool: EditorTool

@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import * as Collapsible from '@radix-ui/react-collapsible'
-import type { Pattern } from '../core/pattern'
+import type { Pattern } from '../../core/pattern'
 import s from './EditorSidebar.module.css'
-import shared from './shared.module.css'
-import { PaletteView } from './PaletteView'
-import { Export } from './Export'
+import shared from '../../ui/shared.module.css'
+import { PaletteView } from '../palette/PaletteView'
+import { Export } from '../export/Export'
 
 interface EditorSidebarProps {
   pattern: Pattern | null

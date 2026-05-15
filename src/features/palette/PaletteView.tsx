@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
-import type { PaletteColor } from '../core/pattern'
-import shared from './shared.module.css'
+import type { PaletteColor } from '../../core/pattern'
+import shared from '../../ui/shared.module.css'
 import s from './PaletteView.module.css'
-import { cx } from './cx'
-import { ColorPicker, Select } from './primitives'
-import { ConfirmDialog } from './ConfirmDialog'
+import { cx } from '../../ui/cx'
+import { ColorPicker, Select } from '../../ui/primitives'
+import { ConfirmDialog } from '../../ui/ConfirmDialog'
 
 interface PaletteViewProps {
   palette: PaletteColor[]

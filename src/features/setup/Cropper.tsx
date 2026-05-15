@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import EasyCropper, { type Area, type Point } from 'react-easy-crop'
 import 'react-easy-crop/react-easy-crop.css'
-import shared from './shared.module.css'
+import shared from '../../ui/shared.module.css'
 import s from './Cropper.module.css'
 import controlStyles from './Controls.module.css'
 

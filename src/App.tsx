@@ -1,10 +1,10 @@
 import styles from './App.module.css'
 import { useAppState } from './hooks'
-import { RowTracker } from './ui'
 import { TooltipProvider, ToastProvider } from './ui/primitives'
 import { AppNavbar } from './ui/AppNavbar'
-import { SetupWizard } from './ui/SetupWizard'
-import { EditorLayout } from './ui/EditorLayout'
+import { SetupWizard } from './features/setup/SetupWizard'
+import { EditorLayout } from './features/editor/EditorLayout'
+import { RowTracker } from './features/tracking/RowTracker'
 
 function App() {
   const state = useAppState()

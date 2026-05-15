@@ -1,8 +1,8 @@
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
-import type { PaletteColor } from '../core/pattern'
-import type { EditorTool } from './PreviewGrid'
+import type { PaletteColor } from '../../core/pattern'
+import type { EditorTool } from '../preview/PreviewGrid'
 import s from './FloatingToolbar.module.css'
-import { Tooltip, Slider, Switch, ColorPicker } from './primitives'
+import { Tooltip, Slider, Switch, ColorPicker } from '../../ui/primitives'
 
 interface FloatingToolbarProps {
   editorTool: EditorTool

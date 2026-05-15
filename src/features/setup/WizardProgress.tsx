@@ -1,5 +1,5 @@
 import { Fragment } from 'react'
-import { cx } from './cx'
+import { cx } from '../../ui/cx'
 import s from './WizardProgress.module.css'
 
 export type WizardStep = 'upload' | 'crop' | 'configure' | 'preview'

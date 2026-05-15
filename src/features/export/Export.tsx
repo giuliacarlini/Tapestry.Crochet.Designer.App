@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import type { Pattern } from '../core/pattern'
-import { serializePattern } from '../core/pattern'
+import type { Pattern } from '../../core/pattern'
+import { serializePattern } from '../../core/pattern'
 import s from './Export.module.css'
-import { useToast } from './primitives'
+import { useToast } from '../../ui/primitives'
 
 interface ExportProps {
   pattern: Pattern | null

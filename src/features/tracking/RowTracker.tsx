@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { PaletteColor } from '../core/pattern'
-import shared from './shared.module.css'
+import type { PaletteColor } from '../../core/pattern'
+import shared from '../../ui/shared.module.css'
 import s from './RowTracker.module.css'
-import { cx } from './cx'
-import { Slider, Switch } from './primitives'
+import { cx } from '../../ui/cx'
+import { Slider, Switch } from '../../ui/primitives'
 
 interface RowTrackerProps {
   width: number

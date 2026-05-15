@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, type PointerEvent } from 'react'
-import type { PaletteColor } from '../core/pattern'
-import shared from './shared.module.css'
+import type { PaletteColor } from '../../core/pattern'
+import shared from '../../ui/shared.module.css'
 import s from './PreviewGrid.module.css'
-import { cx } from './cx'
+import { cx } from '../../ui/cx'
 
 export type EditorTool = 'paint' | 'erase' | 'fill' | 'picker'
 

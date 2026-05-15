@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import type { Pattern } from '../core/pattern'
-import type { EditorTool } from './PreviewGrid'
+import type { Pattern } from '../../core/pattern'
+import type { EditorTool } from '../preview/PreviewGrid'
 import s from './EditorLayout.module.css'
 import { FloatingToolbar } from './FloatingToolbar'
-import { PreviewGrid } from './PreviewGrid'
+import { PreviewGrid } from '../preview/PreviewGrid'
 import { EditorSidebar } from './EditorSidebar'
 
 interface EditorLayoutProps {

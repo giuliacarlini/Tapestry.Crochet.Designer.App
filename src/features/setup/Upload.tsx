@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState, type ChangeEvent, type DragEvent } from 'react'
-import shared from './shared.module.css'
+import shared from '../../ui/shared.module.css'
 import s from './Upload.module.css'
-import { cx } from './cx'
+import { cx } from '../../ui/cx'
 
 interface UploadProps {
   onImageSelected: (imageUrl: string) => void
