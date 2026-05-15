@@ -13,7 +13,7 @@ import {
   type ResolutionPreset,
 } from '../core/pattern'
 import { runQuantizeWorker } from '../workers/quantizeClient'
-import type { EditorTool } from '../ui/PreviewGrid'
+import type { EditorTool } from '../features/preview/PreviewGrid'
 
 export type AppStep = 'setup' | 'editor' | 'tracker'
 
